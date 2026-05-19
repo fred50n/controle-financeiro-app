@@ -29,7 +29,7 @@ export default function AddExpense() {
   );
 
   const handleSave = async () => {
-    const val = parseFloat(amount);
+    const val = parseFloat(amount.replace(',', '.'));
     if (isNaN(val) || val <= 0) {
       Alert.alert('Erro', 'Por favor, insira um valor válido.');
       return;

@@ -1,5 +1,7 @@
+import 'react-native-get-random-values';
 import { supabase } from '../lib/supabase';
 import { addMonths, formatISO } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid';
 
 export type ExpenseType = 'unica' | 'fixa' | 'parcelada';
 export type ExpenseStatus = 'pendente' | 'paga';
@@ -11,7 +13,9 @@ export interface ExpenseData {
   description: string;
   type: ExpenseType;
   status?: ExpenseStatus;
+  status?: ExpenseStatus;
   installments?: number;
+  group_id?: string;
 }
 
 export const createExpense = async (data: ExpenseData) => {
@@ -30,6 +34,7 @@ export const createExpense = async (data: ExpenseData) => {
     });
   } else if (data.type === 'parcelada') {
     const totalInstallments = data.installments || 1;
+    const groupId = uuidv4();
     for (let i = 0; i < totalInstallments; i++) {
       const nextDate = addMonths(data.due_date, i);
       records.push({
@@ -39,10 +44,12 @@ export const createExpense = async (data: ExpenseData) => {
         description: `${baseDescription} (${i + 1}/${totalInstallments})`.trim(),
         type: data.type,
         status,
+        group_id: groupId,
       });
     }
   } else if (data.type === 'fixa') {
-    for (let i = 0; i < 12; i++) {
+    const groupId = uuidv4();
+    for (let i = 0; i < 24; i++) {
       const nextDate = addMonths(data.due_date, i);
       records.push({
         due_date: formatISO(nextDate, { representation: 'date' }),
@@ -51,6 +58,7 @@ export const createExpense = async (data: ExpenseData) => {
         description: baseDescription,
         type: data.type,
         status,
+        group_id: groupId,
       });
     }
   }
@@ -111,12 +119,23 @@ export const markAsPending = async (id: string) => {
 };
 
 export const deleteExpense = async (id: string) => {
-  const { error } = await supabase
-    .from('expenses')
-    .delete()
-    .eq('id', id);
+  const current = await getExpenseById(id);
+  if (!current) throw new Error('Despesa não encontrada');
 
-  if (error) throw error;
+  if (current.group_id) {
+    const { error } = await supabase
+      .from('expenses')
+      .delete()
+      .eq('group_id', current.group_id)
+      .gte('due_date', current.due_date);
+    if (error) throw error;
+  } else {
+    const { error } = await supabase
+      .from('expenses')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+  }
 };
 
 export const getExpenseById = async (id: string) => {
@@ -131,20 +150,38 @@ export const getExpenseById = async (id: string) => {
 };
 
 export const updateExpense = async (id: string, updatesData: Partial<ExpenseData>) => {
+  const current = await getExpenseById(id);
+  if (!current) throw new Error('Despesa não encontrada');
+
   const updates: any = {};
   if (updatesData.amount !== undefined) updates.amount = updatesData.amount;
   if (updatesData.category !== undefined) updates.category = updatesData.category;
+  
+  if (current.group_id) {
+    // Only update future recurring instances if amount or category changed.
+    // We intentionally don't update description for installments as it has (1/10) suffixes.
+    // We also avoid shifting dates to keep MVP simple.
+    const { error } = await supabase
+      .from('expenses')
+      .update(updates)
+      .eq('group_id', current.group_id)
+      .gte('due_date', current.due_date);
+      
+    if (error) throw error;
+  }
+  
+  // Update the current item entirely, including description and specific date changes
   if (updatesData.description !== undefined) updates.description = updatesData.description;
   if (updatesData.due_date) {
     updates.due_date = formatISO(updatesData.due_date, { representation: 'date' });
   }
 
-  const { data: updated, error } = await supabase
+  const { data: updated, error: currentError } = await supabase
     .from('expenses')
     .update(updates)
     .eq('id', id)
     .select();
 
-  if (error) throw error;
+  if (currentError) throw currentError;
   return updated;
 };
