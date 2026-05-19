@@ -129,6 +129,8 @@ Para instalar o aplicativo no celular sem precisar do computador:
 A sua chave do Google não foi enviada para o git no arquivo `.env`. Por isso, ensine ela diretamente ao servidor do Expo:
 ```bash
 npx eas-cli secret:create --scope project --name EXPO_PUBLIC_GEMINI_API_KEY --value "SUA_CHAVE_AQUI" --type string
+npx eas-cli secret:create --scope project --name EXPO_PUBLIC_SUPABASE_URL --value "SUA_URL_DO_SUPABASE_AQUI" --type string
+npx eas-cli secret:create --scope project --name EXPO_PUBLIC_SUPABASE_ANON_KEY --value "SUA_CHAVE_ANONIMA_DO_SUPABASE" --type string
 ```
 
 ### 2. Rodar o Build
