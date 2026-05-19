@@ -6,9 +6,10 @@ Um aplicativo mobile ultrarrápido projetado para capturar despesas diárias e e
 
 ## 🚀 Principais Funcionalidades
 
-- **Registro Rápido de Despesas:** Interface focada em agilidade com suporte a despesas únicas, parceladas e fixas.
-- **Pré-geração de Recorrências:** As parcelas ou meses futuros já são pré-gerados no banco, simplificando as consultas no Excel.
+- **Registro Rápido de Despesas:** Interface focada em agilidade com suporte a despesas únicas, parceladas e fixas. Suporta digitação flexível de centavos com vírgula ou ponto.
+- **Pré-geração de Recorrências:** As despesas fixas são pré-geradas para os próximos 24 meses. Despesas vinculadas no mesmo grupo atualizam em lote (editar ou deletar uma parcela afeta as futuras automaticamente).
 - **Scanner Inteligente de Cupons Fiscais:** Integração com a Vision API do Gemini para ler fotos de recibos de supermercado, identificando nome do mercado, valor total e todos os itens individualmente.
+- **Gestos Deslizantes (Swipe):** Na visualização de meses, é possível alterar o mês corrente deslizando o dedo para a esquerda ou direita na tela, além do re-foco automático para o mês atual ao entrar na aba.
 - **Integração Nativa com Excel:** Usa o driver Npgsql para que o Excel baixe os dados ao vivo do Supabase sem necessidade de arquivos `.csv`.
 - **Notificações Push Automatizadas:** Lembretes diários de contas a pagar processados diretamente no Supabase Edge Functions e `pg_cron`.
 - **Menu de Contexto (ActionModal):** Interface limpa sem botões excessivos, ativada ao tocar nos cartões.
