@@ -42,13 +42,8 @@ export default function MonthsScreen() {
   // Resets to current month on tab focus
   useFocusEffect(
     useCallback(() => {
-      const now = new Date();
-      if (now.getMonth() !== currentDate.getMonth() || now.getFullYear() !== currentDate.getFullYear()) {
-        setCurrentDate(now);
-      } else {
-        loadData();
-      }
-    }, [currentDate])
+      setCurrentDate(new Date());
+    }, [])
   );
 
   const panResponder = useRef(
