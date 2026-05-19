@@ -1,0 +1,2 @@
+﻿#nullable enable
+static Npgsql.NpgsqlNodaTimeExtensions.UseNodaTime<TMapper>(this TMapper mapper) -> TMapper
