@@ -1,7 +1,0 @@
-{
-  // List of extensions which should be recommended for users of this workspace.
-  "recommendations": [
-    "ms-dotnettools.csharp",
-    "ms-dotnettools.csdevkit"
-  ]
-}
