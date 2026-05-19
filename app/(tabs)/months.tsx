@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, PanResponder } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { getExpensesByMonth, markAsPaid, markAsPending, deleteExpense } from '../../src/services/expenses';
 import ActionModal from '../../src/components/ActionModal';
 
@@ -34,11 +34,38 @@ export default function MonthsScreen() {
     }
   };
 
+  // Reloads data whenever currentDate changes
+  useEffect(() => {
+    loadData();
+  }, [currentDate]);
+
+  // Resets to current month on tab focus
   useFocusEffect(
     useCallback(() => {
-      loadData();
+      const now = new Date();
+      if (now.getMonth() !== currentDate.getMonth() || now.getFullYear() !== currentDate.getFullYear()) {
+        setCurrentDate(now);
+      } else {
+        loadData();
+      }
     }, [currentDate])
   );
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        return Math.abs(gestureState.dx) > 30 && Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        if (gestureState.dx > 50) {
+          handlePrevMonth();
+        } else if (gestureState.dx < -50) {
+          handleNextMonth();
+        }
+      },
+    })
+  ).current;
 
   const handlePrevMonth = () => {
     setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
@@ -84,7 +111,7 @@ export default function MonthsScreen() {
   const total = expenses.reduce((acc, curr) => acc + Number(curr.amount), 0);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} {...panResponder.panHandlers}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handlePrevMonth} style={styles.arrowBtn}>
           <Ionicons name="chevron-back" size={24} color="#333" />
