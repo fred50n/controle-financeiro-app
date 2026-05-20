@@ -4,7 +4,7 @@ Um aplicativo mobile ultrarrápido projetado para capturar despesas diárias e e
 
 ---
 
-## 🚀 Principais Funcionalidades
+## Principais Funcionalidades
 
 - **Registro Rápido de Despesas:** Interface focada em agilidade com suporte a despesas únicas, parceladas e fixas. Suporta digitação flexível de centavos com vírgula ou ponto.
 - **Pré-geração de Recorrências:** As despesas fixas são pré-geradas para os próximos 24 meses. Despesas vinculadas no mesmo grupo atualizam em lote (editar ou deletar uma parcela afeta as futuras automaticamente).
@@ -16,7 +16,7 @@ Um aplicativo mobile ultrarrápido projetado para capturar despesas diárias e e
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 
 - **Framework Mobile:** React Native com Expo (SDK 54) e Expo Router
 - **Backend & Banco de Dados:** Supabase (PostgreSQL)
@@ -27,7 +27,7 @@ Um aplicativo mobile ultrarrápido projetado para capturar despesas diárias e e
 
 ---
 
-## 📋 Pré-requisitos
+## Pré-requisitos
 
 Para rodar este projeto em sua máquina, você vai precisar de:
 
@@ -39,7 +39,7 @@ Para rodar este projeto em sua máquina, você vai precisar de:
 
 ---
 
-## 🏁 Como Rodar o Projeto (Local)
+## Como Rodar o Projeto (Local)
 
 ### 1. Clonar o Repositório e Instalar
 
@@ -82,7 +82,7 @@ Escaneie o QR Code com o aplicativo da Câmera (iOS) ou o Expo Go (Android).
 
 ---
 
-## 🏗️ Arquitetura e Fluxo de Dados
+## Arquitetura e Fluxo de Dados
 
 ### Estrutura de Diretórios
 
@@ -110,7 +110,7 @@ Quando o usuário tira uma foto na aba **Mercado**:
 
 ---
 
-## 📊 Integração com o Excel
+## Integração com o Excel
 
 Para conectar sua planilha aos dados inseridos via aplicativo:
 
@@ -121,7 +121,7 @@ Para conectar sua planilha aos dados inseridos via aplicativo:
 
 ---
 
-## 🚀 Como Gerar o APK (Produção)
+## Como Gerar o APK (Produção)
 
 Para instalar o aplicativo no celular sem precisar do computador:
 
@@ -143,7 +143,7 @@ No final do processo (leva em torno de 5 a 10 minutos), um link será gerado no 
 
 ---
 
-## 🔧 Troubleshooting (Solução de Problemas)
+## Troubleshooting (Solução de Problemas)
 
 ### O App fecha sozinho ao abrir no celular (APK)
 - **Causa:** O Supabase exige `URL` e `Anon Key` no segundo zero da execução. Se o `.env` não for transferido pro EAS e as chaves não estiverem no código, ele fecha instantaneamente.
