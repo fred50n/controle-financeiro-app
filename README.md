@@ -159,4 +159,4 @@ No final do processo (leva em torno de 5 a 10 minutos), um link será gerado no 
 
 ---
 
-**Desenvolvido com 🩵 usando React Native, IA & Supabase.**
+**Desenvolvido usando React Native, Expo, IA & Supabase.**
